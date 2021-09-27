@@ -32,7 +32,7 @@ INSERT INTO PROYECTO1_BDTD.DBO.DimSubFactura(Id_Factura, Folio, CondicionPago)
 	where f.Id_CondicionesPago = cp.Id_CondicionesPago
 
 --POBLAR LA DIMENSIÓN TIEMPO
-INSERT INTO PROYECTO1_BDTD.DBO.DimTiempo(Id_tiempo, Anio, Mes, Dia, NombreDia, NombreMes, Trimestre)
+INSERT INTO PROYECTO1_BDTD.DBO.DimTiempo(Id_tiempo, Anio, Mes, Dia, NombreDia, NombreMes, Trimestre,Semestre)
 	select distinct
 	cast(
 		SUBSTRING(convert(varchar, fecha, 126),1,4) +
@@ -44,9 +44,24 @@ INSERT INTO PROYECTO1_BDTD.DBO.DimTiempo(Id_tiempo, Anio, Mes, Dia, NombreDia, N
 		DAY(fecha),
 		DATENAME(WEEKDAY, fecha),
 		DATENAME(MONTH, fecha),
-		(month(fecha) - 1) / 3 + 1
+		(month(fecha) - 1) / 3 + 1,
+		(month(fecha) - 1) / 6 + 1
 
-	from PinturaO2021.dbo.Factura;
+	from PinturaO2021.dbo.Factura f
+	union select distinct
+	cast(
+		SUBSTRING(convert(varchar, fecha, 126),1,4) +
+		SUBSTRING(convert(varchar, fecha, 126),6,2) +
+		SUBSTRING(convert(varchar, fecha, 126),9,2)
+		as bigint),
+		year(fecha),
+		MONTH(fecha),
+		DAY(fecha),
+		DATENAME(WEEKDAY, fecha),
+		DATENAME(MONTH, fecha),
+		(month(fecha) - 1) / 3 + 1,
+		(month(fecha) - 1) / 6 + 1
+	from PinturaO2021.dbo.ProveedorFactura pf;
 
 --POBLAR LA DIMENSIÓN DIM VENDEDOR
 INSERT INTO PROYECTO1_BDTD.dbo.DimVendedor(Id_Vendedor, Nombre)
@@ -76,6 +91,19 @@ insert into PROYECTO1_BDTD.dbo.FactSales(#num_fact, #num_articulos, #total, #sub
 	PinturaO2021.dbo.Factura f, PinturaO2021.dbo.Factura_d f_d
 	where f.Id_Factura = f_d.Id_Factura
 	and axf.id_factura = f_d.Id_Factura
+
+
+--POBLAR LA SUB DIMENSIÓN COMPRA
+
+--POBLAR LA SUB DIMENSIÓN COMPRADOR
+
+--POBLAR LA SUB DIMENSIÓN PROVEEDOR
+
+ --POBLAR LA DIMENSIÓN FACT COMPRA
+
+
+
+
 
 END
 
