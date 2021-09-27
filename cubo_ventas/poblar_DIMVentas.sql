@@ -92,14 +92,26 @@ insert into PROYECTO1_BDTD.dbo.FactSales(#num_fact, #num_articulos, #total, #sub
 	where f.Id_Factura = f_d.Id_Factura
 	and axf.id_factura = f_d.Id_Factura
 
-
 --POBLAR LA SUB DIMENSIÓN COMPRA
+insert into PROYECTO1_BDTD.dbo.DimProveedor(id_compra,Folio,FormaPago)
+	select pf.id_ProveedorFactura, pf.Folio, fp.Descripcion
+	from PinturaO2021.dbo.ProveedorFactura pf
+	inner join PinturaO2021.dbo.ProveedorFormaPago fp 
+	on (pf.id_proveedorformapago = fp.Id_FormaPago);
 
 --POBLAR LA SUB DIMENSIÓN COMPRADOR
+insert into PROYECTO1_BDTD.dbo.DimComprador(id_comprador,nombre)
+	select id_comprador, nombre 
+	from PinturaO2021.dbo.Comprador;
 
 --POBLAR LA SUB DIMENSIÓN PROVEEDOR
+insert into (Id_proveedor, RazonSocial, Colonia, Ciudad, Estado, Pais)
+	select Id_Proveedor, RazonSocial, Colonia, c.nombre, c.estado, c.pais
+	from PinturaO2021.dbo.Proveedor p
+	inner join PinturaO2021.dbo.Ciudad c on (c.id_ciudad=p.id_Ciudad);
 
  --POBLAR LA DIMENSIÓN FACT COMPRA
+
 
 
 
