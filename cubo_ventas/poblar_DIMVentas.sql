@@ -111,13 +111,27 @@ insert into (Id_proveedor, RazonSocial, Colonia, Ciudad, Estado, Pais)
 	inner join PinturaO2021.dbo.Ciudad c on (c.id_ciudad=p.id_Ciudad);
 
  --POBLAR LA DIMENSIÓN FACT COMPRA
+insert into PROYECTO1_BDTD.dbo.FactCompra(#cantidad_compra, #total, #subtotal,
+	#descuento,	#IVA, #cantidad_articulos, 
+	Id_tiempo, Id_articulo, Id_proveedor, Id_comprador, Id_compra)
+	SELECT f_d.cantidad, f_d.total, f_d.subtotal, f_d.Descuento, f_d.iva, 
+		1 as cantidad_articulos,
+		cast( --idtiempo
+			SUBSTRING(convert(varchar, f.fecha, 126),1,4) +
+			SUBSTRING(convert(varchar, f.fecha, 126),6,2) +
+			SUBSTRING(convert(varchar, f.fecha, 126),9,2)
+		as bigint) as tiempo, 
+		f_d.id_articulo,
+		f_d.id_proveedorfactura,
+		f.id_comprador,
+		f.id_Proveedor	
 
-
-
-
-
+	from PinturaO2021.dbo.ProveedorFactura f, PinturaO2021.dbo.ProveedorFactura_d f_d
+	where f.id_ProveedorFactura = f_d.id_proveedorfactura;
 
 END
 
 --EXECUTE POBLAR_PROYECTO1_BDTD;
 --select * from PROYECTO1_BDTD.dbo.Factsales order by id_factura;
+
+	
