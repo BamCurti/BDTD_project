@@ -15,7 +15,6 @@ BEGIN
 
 --POBLAR LA DIMENSIÓN ARTICULO !!!!FALTA COLOR!!!!!!
 INSERT INTO PROYECTO1_BDTD.dbo.DimArticulo (Id_Articulo, Descripcion, Codigo, ColorBase, ColorDerivado, UMD, Tipo, Grupo)
-
 	SELECT a.id_articulo, a.descripcion, a.codigo,
 	--color base
 		case
@@ -26,7 +25,69 @@ INSERT INTO PROYECTO1_BDTD.dbo.DimArticulo (Id_Articulo, Descripcion, Codigo, Co
 		WHEN A.descripcion like('%AMARILLO%') THEN 'AMARILLO'
 		ELSE 'OTRO'
 	end,
-	null, u.descripcion, a_t.descripcion, a_g.descripcion
+	case
+		--BLANCO
+		WHEN a.descripcion like('%OSTRA%') then 'OSTRA'
+		WHEN a.descripcion like('%OSTION%') then 'OSTION'
+		--AMARILLO
+		WHEN A.descripcion LIKE('%CROMO%') THEN 'CROMO'
+		WHEN A.descripcion LIKE('%HOLANDA%') THEN 'HOLANDA'
+		WHEN A.descripcion LIKE('%LIMON%') THEN 'LIMON'
+		WHEN A.descripcion LIKE('%TRIGO%') THEN 'TRIGO'
+		WHEN A.descripcion LIKE('%INTENSO%') THEN 'INTENSO'
+		WHEN A.descripcion LIKE('%OXIDO%') THEN 'OXIDO'
+		WHEN A.descripcion LIKE('%MANGO%') THEN 'MANGO'
+		--ROJO
+		WHEN A.descripcion LIKE('%LADRILLO%') THEN 'LADRILLO'
+		WHEN A.descripcion LIKE('%SULTANA%') THEN 'SULTANA'
+		WHEN A.descripcion LIKE('%CORAL%') THEN 'CORAL'
+		WHEN A.descripcion LIKE('%FUEGO%') THEN 'FUEGO'
+		--AZUL
+		WHEN A.descripcion LIKE('%ORGANICO%') THEN 'ORGANICO'
+		WHEN A.descripcion LIKE('%REGIO%') THEN 'REGIO'
+		WHEN A.descripcion LIKE('%CIELO%') THEN 'CIELO'
+		WHEN A.descripcion LIKE('%OBSCURO%') THEN 'OBSCURO'
+		WHEN A.descripcion LIKE('%CELESTE%') THEN 'CELESTE'
+		WHEN A.descripcion LIKE('%PRINCESA%') THEN 'PRINCESA'
+		WHEN A.descripcion LIKE('%INTENSO%') THEN 'INTENSO'
+		WHEN A.descripcion LIKE('%MEDITERRANEO%') THEN 'MEDITERRANEO'
+		WHEN A.descripcion LIKE('%REY%') THEN 'REY'
+		WHEN A.descripcion LIKE('%RIVIERA%') THEN 'RIVIERA'
+		WHEN A.descripcion LIKE('%ARTICO%') THEN 'ARTICO'
+		WHEN A.descripcion LIKE('%MEDIANO%') THEN 'MEDIANO'
+		--NEGRO
+		WHEN A.descripcion LIKE('%MATE%') THEN 'MATE'
+		WHEN A.descripcion LIKE('%BRILLANTE%') THEN 'BRILLANTE'
+		WHEN A.descripcion LIKE('%SATINADO%') THEN 'SATINADO'
+		--OTRO
+		WHEN A.descripcion LIKE('%CREMA%') THEN 'CREMA'
+		WHEN A.descripcion LIKE('%VERDE%') THEN 'VERDE'
+		WHEN A.descripcion LIKE('%MARFIL%') THEN 'MARFIL'
+		WHEN A.descripcion LIKE('%CASTAÑO%') THEN 'CASTAÑO'
+		WHEN A.descripcion LIKE('%GRIS%') THEN 'GRIS'
+		WHEN A.descripcion LIKE('%BERMELLON%') THEN 'BERMELLON'
+		WHEN A.descripcion LIKE('%NARANJA%') THEN 'NARANJA'
+		WHEN A.descripcion LIKE('%TURQUESA%') THEN 'TURQUESA'
+		WHEN A.descripcion LIKE('%OCRE%') THEN 'OCRE'
+		WHEN A.descripcion LIKE('%VIOLETA%') THEN 'VIOLETA'
+		WHEN A.descripcion LIKE('%AGUAMARINA%') THEN 'AGUAMARINA'
+		WHEN A.descripcion LIKE('%ORO%') THEN 'ORO'
+		WHEN A.descripcion LIKE('%COBRE%') THEN 'COBRE'
+		WHEN A.descripcion LIKE('%MELON%') THEN 'MELON'
+		WHEN A.descripcion LIKE('%VAINILLA%') THEN 'VAINILLA'
+		WHEN A.descripcion LIKE('%LILA%') THEN 'LILA'
+		WHEN A.descripcion LIKE('%ROSA%') THEN 'ROSA'
+		WHEN A.descripcion LIKE('%NIEBLA%') THEN 'NIEBLA'
+		WHEN A.descripcion LIKE('%COCOA%') THEN 'COCOA'
+		WHEN A.descripcion LIKE('%APIO%') THEN 'APIO'
+		WHEN A.descripcion LIKE('%ALMENDRA%') THEN 'ALMENDRA'
+		WHEN A.descripcion LIKE('%CHAMPAÑA%') THEN 'CHAMPAÑA'
+		WHEN A.descripcion LIKE('%DURAZNO%') THEN 'DURAZNO'
+		WHEN A.descripcion LIKE('%CAFÉ%') THEN 'CAFÉ'
+		WHEN A.descripcion LIKE('%SANDALO%') THEN 'SANDALO'
+		ELSE 'N/A'
+	end,
+	u.descripcion, a_t.descripcion, a_g.descripcion
 	FROM PinturaO2021.DBO.Articulo a, PinturaO2021.dbo.ArticuloGrupo a_g,
 	PinturaO2021.dbo.ArticuloTipo a_t, PinturaO2021.dbo.umd u
 	WHERE A.id_articulogrupo = a_g.id_articulogrupo
@@ -154,4 +215,3 @@ insert into PROYECTO1_BDTD.dbo.FactCompra(#cantidad_compra, #total, #subtotal,
 END
 
 --EXECUTE POBLAR_PROYECTO1_BDTD;
-select * from PROYECTO1_BDTD.dbo.DimArticulo
