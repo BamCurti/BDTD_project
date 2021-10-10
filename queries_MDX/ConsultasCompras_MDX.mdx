@@ -1,0 +1,373 @@
+-- 1. ¿Cuáles es el total de compras por comprador?
+select
+	non empty
+	[Measures].[#cantidad Compra]
+	on columns,
+	non empty
+	[Dim Comprador].[Nombre].[Nombre]
+	on rows
+from [PROYECTO1_COMPRA_CUB]
+-- 2. ¿Cuáles son los artículos que se vendieron en la factura 123? Los datos a mostrar son el identificador del artículo, el código, la descripción, el color, la unidad de medida, la cantidad, el precio al que fue comprado, y el día de la semana de la factura al proveedor.
+select
+	non empty {
+	[Measures].[#cantidad Articulos],
+	[Measures].[#total]
+	}on columns,
+	non empty (
+	[Dim Articulo].[Id Articulo].[Id Articulo],
+	[Dim Articulo].[Codigo].[Codigo],
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Articulo].[Color Base].[Color Base],
+	[Dim Articulo].[UMD].[UMD],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
+	)on rows
+from [PROYECTO1_COMPRA_CUB]
+where [Dim Sub Compra].[Id Compra].&[123]
+
+-- 3. ¿Cuál es el total de compras por año por color base (negro, blanco, rojo, amarillo, azul, sin color)?
+select
+	non empty {
+	[Measures].[#cantidad Compra]
+	}on columns,
+	non empty (
+	[Dim Articulo].[Color Base].[Color Base]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 4. ¿Cuánto compramos (en pesos) por unidad de medida por cada año? Los datos a mostrar son color, derivado del color (ejemplo rojo fuego), cantidad de artículos, total de compras, unidad de medida y año.
+select
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Articulo].[UMD].[UMD],
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Articulo].[Color Base].[Color Base],
+	[Dim Articulo].[Color Derivado].[Color Derivado]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 5. ¿Cuál es el total de compras por colonia del proveedor? Los datos a mostrar son colonia del proveedor, total de compras y el número de facturas.
+select
+	non empty {
+	[Measures].[#cantidad Compra],
+	[Measures].[#total]
+	}on columns,
+	non empty 
+	[Dim Proveedor].[Colonia].[Colonia]
+	on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 6. ¿Cuáles colores se compraron a cada proveedor por año? Los datos a mostrar son la razón social del proveedor, la colonia, el código postal, el nombre del proveedor, el año el total de compras y la cantidad de artículos comprados.
+select
+	non empty {
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Proveedor].[Razon Social].[Razon Social],
+	[Dim Proveedor].[Colonia].[Colonia],
+	[Dim Tiempo].[Anio].[Anio]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 7. ¿Cuál es el historial de compras del comprador Lupita? Los datos a mostrar son el identificador del comprador, el número de artículos, el número de facturas, el año, mes y día de la semana (lunes, martes, etc.).
+select
+	non empty {
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Comprador].[Id Comprador].[Id Comprador],
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Mes].[Mes],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
+	)on rows
+from [PROYECTO1_COMPRA_CUB]
+WHERE [Dim Comprador].[Nombre].&[Lupita];
+
+-- 8. ¿Cuál fue el día de la semana que se compró más por cada año registrado? Los datos a mostrar son el número de artículos, el número de facturas, total de compras y día de la semana.
+
+-- 9. ¿Cuál es el nombre del proveedor al que le compramos más cantidad artículos cada año? Los datos a mostrar son el nombre del proveedor, la razón social, la colonia, el código postal, el total de artículos comprados, la cantidad de cada artículo comprado y el total de compras en pesos.
+
+-- 10. ¿Cuál es el total de compras por comprador por periodo? Los datos a mostrar son el total de artículos comprados, el total de compras en pesos, el año, el semestre, el trimestre, el mes y el día de la semana.
+select
+	non empty {
+	[Measures].[#cantidad Articulos],
+	[Measures].[#total]
+	}on columns,
+	non empty (
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Semestre].[Semestre],
+	[Dim Tiempo].[Trimestre].[Trimestre],
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 11. ¿Cuál es el comprador que más compras hizo en el 2019? Los datos a mostrar son el nombre del comprador, el total de artículos comprados, la cantidad de cada artículo comprado y el total de compras en pesos.
+select
+	non empty {
+	[Measures].[#cantidad Articulos],
+	[Measures].[#total]
+	}on columns,
+	non empty (topcount(
+	[Dim Comprador].[Nombre].[Nombre],1,[Measures].[#cantidad Compra]
+	),[Dim Articulo].[Descripcion].members
+	)on rows
+from  [PROYECTO1_COMPRA_CUB]
+where [Dim Tiempo].[Anio].[2019]
+
+-- 12. ¿Cuáles son los folios de facturas que compró el comprador con identificador 9? Los datos a mostrar son el nombre del comprador, el identificador de la factura, el folio de la factura, la fecha de la factura, el subtotal, el descuento, el iva y el total de la factura.
+select
+	non empty {
+	[Measures].[#subtotal],
+	[Measures].[#descuento],
+	[Measures].[#IVA],
+	[Measures].[#total]
+	}on columns,
+	non empty (
+	[Dim Comprador].[Nombre].[Nombre],
+	[Dim Sub Compra].[Id Compra].[Id Compra],
+	[Dim Sub Compra].[Folio].[Folio],
+	[Dim Tiempo].[Id Tiempo].[Id Tiempo]
+	)on rows
+from [PROYECTO1_COMPRA_CUB]
+where [Dim Comprador].[Id Comprador].[9];
+-- 13. ¿Cuál es el total de compras, en pesos, por ciudad por año? Los datos a mostrar son el nombre del país, el nombre del estado, el nombre de la ciudad, el total de compras en pesos, el total de artículos, la cantidad de cada artículo comprado y año.
+select
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Proveedor].[Pais].[Pais],
+	[Dim Proveedor].[Estado].[Estado],
+	[Dim Proveedor].[Ciudad].[Ciudad],
+	[Dim Tiempo].[Anio].[Anio]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 14. ¿Cuáles son los cinco artículos más comprados? Los datos a mostrar son el nombre del artículo, el color base, la categoría del artículo, el tipo del artículo, el día de la semana y el total en pesos. 
+select
+	non empty {
+	[Measures].[#total]
+	}on columns,
+	non empty ( topcount(
+	[Dim Articulo].[Descripcion].[Descripcion]
+		,5,[Measures].[#cantidad Articulos]),
+	[Dim Articulo].[Color Base].[Color Base],
+	[Dim Articulo].[Grupo].[Grupo],
+	[Dim Articulo].[Tipo].[Tipo],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 15. ¿Cuál es el historial de compras al proveedor con identificador 89? Los datos a mostrar son el identificador del proveedor, la razón social, la colonia, el número de artículos, el nombre del proveedor, el número de facturas, el año, el mes y el día de la semana.
+select
+	non empty {
+	[Measures].[#cantidad Articulos],
+	[Measures].[#cantidad Compra]
+	}on columns,
+	non empty ( 
+	[Dim Proveedor].[Id Proveedor].[89],
+	[Dim Proveedor].[Razon Social].[Razon Social],
+	[Dim Proveedor].[Colonia].[Colonia],
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Mes].[Mes],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 16. ¿Cuál es el artículo menos comprado en el último año registrado en la base de datos? Los datos a mostrar son el total en pesos, el número de veces que se ha comprado, el color derivado, la unidad de medida, el nombre del artículo, la categoría del artículo y el tipo del artículo.
+select 
+non empty {
+[Measures].[#total],
+[Measures].[#cantidad Articulos]
+}on columns,
+non empty bottomcount(( 
+[Dim Articulo].[Color Derivado].[Color Derivado],
+[Dim Articulo].[UMD].[UMD],
+[Dim Articulo].[Descripcion].[Descripcion],
+[Dim Articulo].[Grupo].[Grupo],
+[Dim Articulo].[Tipo].[Tipo]
+),1,[Measures].[#cantidad Articulos])on rows
+from [PROYECTO1_COMPRA_CUB]
+where [Dim Tiempo].[Anio].[2019];
+
+-- 17. ¿Cuál es el total de compras, en pesos, por año por comprador? Los datos a mostrar son el total de compras en pesos, la cantidad de facturas, el total de artículos, la cantidad de cada artículo comprado y el año.
+select 
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Comprador].[Nombre].[Nombre],
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Tiempo].[Anio].[Anio]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 18. ¿Cuál es la cantidad de artículos comprados por proveedor (cantidad y pesos)? Los datos a mostrar son el nombre del proveedor, el total de compras en pesos, la cantidad de facturas, la cantidad de artículos, el año y el mes del año.
+select 
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Proveedor].[Razon Social].[Razon Social],
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 19. ¿Cuál es la distribución de las condiciones de pago a proveedores por cada periodo? Los datos a mostrar son el nombre del proveedor, el total de compras en pesos, la cantidad de facturas, la cantidad de artículos, el año y el mes (enero, febrero, etc.).
+select 
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Proveedor].[Razon Social].[Razon Social],
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 20. ¿Cuál es el mes del año 2013 en que se han comprado más artículos (dinero / pesos)? 
+select 
+	non empty 
+	[Measures].[#total]
+	on columns,
+	non empty topcount(
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes],1
+	)on rows
+from [PROYECTO1_COMPRA_CUB]
+where [Dim Tiempo].[Anio].[2013];
+
+-- 21. ¿Cuál es el mes del año en que se han comprado más artículos? Los datos a mostrar son el nombre del artículo, el total de compras en pesos, la cantidad de facturas, el total de artículos, la cantidad de cada artículo, el año y el mes (enero, febrero, etc.).
+
+-- 22. ¿Cuáles son los cinco proveedores a los que les compramos más mercancía? Los datos a mostrar son el nombre del proveedor, el total de compras en pesos, la cantidad de facturas, la cantidad de artículos y el año.
+select 
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty topcount((
+	[Dim Proveedor].[Razon Social].[Razon Social],
+	[Dim Tiempo].[Anio].[Anio]
+	),5, [Measures].[#cantidad Articulos])on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 23. ¿Cuánto compramos (en pesos) por los colores blanco, negro, rojo, amarillo y azul por cada  año?  Los datos a mostrar son el color, el total de compras, la cantidad de facturas, la cantidad de artículos y el año.
+select 
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	{[Dim Articulo].[Color Base].[BLANCO], [Dim Articulo].[Color Base].[ROJO],
+	[Dim Articulo].[Color Base].[AMARILLO], [Dim Articulo].[Color Base].[AZUL]},
+	[Dim Tiempo].[Anio].[Anio]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 24. ¿Cuánto compramos (en pesos) por los colores blanco, negro, rojo, amarillo y azul por cada año? Los datos a mostrar son el total de compras, la cantidad de facturas, el total de artículos, la cantidad de cada artículo y el año.
+select 
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Tiempo].[Anio].[Anio]
+	)on rows
+from [PROYECTO1_COMPRA_CUB]
+WHERE
+{[Dim Articulo].[Color Base].[BLANCO], [Dim Articulo].[Color Base].[ROJO],
+[Dim Articulo].[Color Base].[AMARILLO], [Dim Articulo].[Color Base].[AZUL]};
+
+-- 25. ¿Cuál es el total de compras por año y por región? Los datos a mostrar son el país, el estado, la ciudad, el total de compras en pesos, la cantidad de facturas, el total de artículos, la cantidad de cada artículo y el año.
+select 
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (
+	[Dim Proveedor].[Pais].[Pais],
+	[Dim Proveedor].[Estado].[Estado],
+	[Dim Proveedor].[Ciudad].[Ciudad],
+	[Dim Tiempo].[Anio].[Anio]
+	)on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 26. ¿Cuál es el artículo más caro que compramos? Los datos a mostrar son el nombre del artículo, su identificador y el precio.
+WITH MEMBER [Measures].[PRECIO] as
+	[Measures].[#total]/[Measures].[#cantidad Articulos]
+select 
+non empty {
+[Measures].[PRECIO] 
+}on columns,
+non empty topcount((
+[Dim Articulo].[Descripcion].[Descripcion],
+[Dim Articulo].[Id Articulo].[Id Articulo]
+),1,[Measures].[PRECIO])on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 27. ¿Cuáles son los dos proveedores a los que les pagamos más dinero cada año? Los datos a mostrar son el nombre del proveedor, la colonia, el total de compras en pesos, la cantidad de facturas, la cantidad de artículos, el total de cada artículo y el año.
+select 
+	non empty {
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	non empty (topcount((
+	[Dim Proveedor].[Razon Social].[Razon Social],
+	[Dim Proveedor].[Colonia].[Colonia]), 2, [Measures].[#total]
+	),[Dim Tiempo].[Anio].[Anio])  on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 28. ¿Cuál es el mes de 2014 en el que se ha comprado más? Los datos a mostrar son el nombre del más y la cantidad en pesos.
+select 
+	non empty {
+	[Measures].[#total]
+	}on columns,
+	non empty topcount(
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes],1
+	)  on rows
+from [PROYECTO1_COMPRA_CUB]
+where [Dim Tiempo].[Anio].[2014];
+
+-- 29. ¿Cuáles son los folios de las facturas de compra de los días jueves de noviembre de 2012? Los datos a mostrar son el identificador de factura, el folio de la factura, el mes y el año.
+select 
+	non empty {
+	[Measures].[#total]
+	}on columns,
+	non empty (
+	[Dim Sub Compra].[Id Compra].[Id Compra],
+	[Dim Sub Compra].[Folio].[Folio],
+	[Dim Tiempo].[Nombre Mes].&[November],
+	[Dim Tiempo].[Anio].[2012]
+	)  on rows
+from [PROYECTO1_COMPRA_CUB]
+where [Dim Tiempo].[Nombre Dia].&[Thursday];
+-- 30. ¿Cuál es la condición de pago más usada con los proveedores?
+select 
+	non empty {
+	[Measures].[#cantidad Compra]
+	}on columns,
+	non empty topcount(
+	[Dim Sub Compra].[Forma Pago].[Forma Pago],1
+	)  on rows
+from [PROYECTO1_COMPRA_CUB];
+
+-- 31. ¿Cuál es el comprador que compra más por día de la semana? Los datos a mostrar son el nombre del comprador, el total de compras, la cantidad de facturas, la cantidad de artículos y el día de la semana.
+
+-- 33. Si se analiza la factura 724 de compras los datos calculados tendrán los valores mostrados color

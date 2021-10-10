@@ -1,7 +1,6 @@
--- ¿Cuántas facturas se expidieron por periodo? Los datos a mostrar son el año, el trimestre, el
--- mes, el día de la semana y el número de facturas de venta.
+-- 1. ¿Cuántas facturas se expidieron por periodo? Los datos a mostrar son el año, el trimestre, el mes, el día de la semana y el número de facturas de venta.
 
--- ¿Cuál es el total de ventas por vendedor?
+-- 2. ¿Cuál es el total de ventas por vendedor?
 select 
 	[Measures].[#num Fact]
 	on columns,
@@ -10,7 +9,7 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el total de ventas por año?
+-- 3. ¿Cuál es el total de ventas por año?
 select 
 	[Measures].[#num Fact]
 	on columns,
@@ -19,9 +18,7 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuáles son los artículos que se vendieron en la factura 768? Los datos a mostrar son el
--- identificador del artículo, el código, la descripción, el color base, la unidad de medida, la cantidad
--- de cada artículo, el precio al que fue vendido, y el día de la semana de la factura.
+-- 4. ¿Cuáles son los artículos que se vendieron en la factura 768? Los datos a mostrar son el identificador del artículo, el código, la descripción, el color base, la unidad de medida, la cantidad de cada artículo, el precio al que fue vendido, y el día de la semana de la factura.
 select 
 	non empty
 	{[Measures].[#num Articulos],
@@ -38,8 +35,7 @@ select
 from [PROYECTO1_VENTA_VOD]
 where [Dim Sub Factura].[Id Factura].&[768];
 
--- ¿Cuántos botes de un litro de vinil acrílicas se vendieron en 2013 por color base (negro, blanco,
--- rojo, amarillo, azul, sin color)? 
+-- 5. ¿Cuántos botes de un litro de vinil acrílicas se vendieron en 2013 por color base (negro, blanco, rojo, amarillo, azul, sin color)? 
 select 
 	non empty
 	[Measures].[#num Articulos]
@@ -52,8 +48,7 @@ where ([Dim Articulo 1].[UMD].&[BOTE 1LT],
 	   [Dim Articulo 1].[Tipo].&[VINIL ACRILICAS],
 	   [Dim Tiempo 1].[Anio].&[2013]);
 
--- ¿Cuál es el total de ventas por artículo por cada periodo? Los datos a mostrar son el año, el mes,
--- número de facturas y el total en pesos.
+-- 6. ¿Cuál es el total de ventas por artículo por cada periodo? Los datos a mostrar son el año, el mes número de facturas y el total en pesos.
 select 
 	non empty
 	{[Measures].[#num Fact],
@@ -66,7 +61,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuántas cubetas de 19 litros de esmalte se vendieron en 2021?
+-- 7. ¿Cuántas cubetas de 19 litros de esmalte se vendieron en 2021?
 select 
 	non empty
 	[Measures].[#num Articulos]
@@ -79,7 +74,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuáles son los años de registro de ventas con los que la base de datos cuenta?
+-- 8. ¿Cuáles son los años de registro de ventas con los que la base de datos cuenta?
 select 
 	non empty
 	[Measures].[#num Fact]
@@ -89,8 +84,7 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el impuesto por artículo por cada mes y año? Los datos a mostrar son el iva, el nombre
--- del artículo, el mes y el año.
+-- 9. ¿Cuál es el impuesto por artículo por cada mes y año? Los datos a mostrar son el iva, el nombre del artículo, el mes y el año.
 select 
 	non empty(
 	[Measures].[#IVA],
@@ -102,11 +96,9 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuánto dinero se facturó de pinturas color rojo en el 2014?
+-- 10. ¿Cuánto dinero se facturó de pinturas color rojo en el 2014?
 
--- ¿Cuáles son los tres de clientes que más nos han comprado (pesos y cantidad)? Los datos a
--- mostrar son el día de la semana, la razón social, la colonia, el código postal, el identificador del
--- cliente, el total de ventas en pesos y el número de artículos.
+-- 11. ¿Cuáles son los tres de clientes que más nos han comprado (pesos y cantidad)? Los datos a mostrar son el día de la semana, la razón social, la colonia, el código postal, el identificador del cliente, el total de ventas en pesos y el número de artículos.
 select 
 	non empty{
 	[Measures].[#total],
@@ -139,8 +131,7 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es la cantidad de artículos vendidos por cada grupo (categoría)? Los datos a mostrar son
--- la descripción del grupo, el número de artículos vendidos y el total de ventas.
+-- 12. ¿Cuál es la cantidad de artículos vendidos por cada grupo (categoría)? Los datos a mostrar son la descripción del grupo, el número de artículos vendidos y el total de ventas.
 select 
 	non empty{
 	[Measures].[#total],
@@ -151,11 +142,9 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el mes del año con mejores ventas (en pesos)? Los datos a mostrar son el año, el total
--- de ventas y la cantidad de artículos vendidos.
+-- 13. ¿Cuál es el mes del año con mejores ventas (en pesos)? Los datos a mostrar son el año, el total de ventas y la cantidad de artículos vendidos.
 
--- ¿Cuáles son los tres tipos de artículos más vendidos? Los datos a mostrar son descripción del
--- tipo, el número de artículos vendidos y el total de ventas en pesos.
+-- 14. ¿Cuáles son los tres tipos de artículos más vendidos? Los datos a mostrar son descripción del tipo, el número de artículos vendidos y el total de ventas en pesos.
 select 
 	non empty{
 	[Measures].[#num Articulos],
@@ -167,9 +156,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el historial de ventas del cliente con identificador 3938? Los datos a mostrar son el
--- identificador del cliente, la razón social, la colonia, el número de artículos, el número de facturas,
--- el año, mes (enero, febrero, etc.) y día de la semana (lunes, martes, etc.).
+-- 15. ¿Cuál es el historial de ventas del cliente con identificador 3938? Los datos a mostrar son el identificador del cliente, la razón social, la colonia, el número de artículos, el número de facturas, el año, mes (enero, febrero, etc.) y día de la semana (lunes, martes, etc.).
 select 
 	non empty{
 	[Measures].[#num Articulos],
@@ -184,9 +171,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el total de ventas por colonia del cliente? Los datos a mostrar son la colonia, el total de
--- ventas en pesos y el número de facturas.
-
+-- 16. ¿Cuál es el total de ventas por colonia del cliente? Los datos a mostrar son la colonia, el total de ventas en pesos y el número de facturas.
 select 
 	non empty{
 	[Measures].[#total],
@@ -197,9 +182,7 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el artículo más vendido en el último año registrado en la base de datos? Los datos a
--- mostrar son el año, el total, el número de veces que se ha vendido, el nombre del artículo, la
--- categoría del artículo y el tipo del artículo.
+-- 17. ¿Cuál es el artículo más vendido en el último año registrado en la base de datos? Los datos a mostrar son el año, el total, el número de veces que se ha vendido, el nombre del artículo, la categoría del artículo y el tipo del artículo.
 select 
 	non empty{
 	[Measures].[#total],
@@ -213,9 +196,7 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el artículo menos vendido en el último año registrado en la base de datos? Los datos a
--- mostrar son el total, el número de veces que se ha vendido, el color, la unidad de medida, el
--- nombre, la categoría y el tipo del artículo.
+-- 18. ¿Cuál es el artículo menos vendido en el último año registrado en la base de datos? Los datos a mostrar son el total, el número de veces que se ha vendido, el color, la unidad de medida, el nombre, la categoría y el tipo del artículo.
 select 
 	non empty{
 	[Measures].[#total],
@@ -233,8 +214,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuáles colores se vendieron por cliente por cada año registrado? Los datos a mostrar son la
--- razón social del cliente, el color base del artículo, la cantidad de artículos y el año.
+-- 19. ¿Cuáles colores se vendieron por cliente por cada año registrado? Los datos a mostrar son la razón social del cliente, el color base del artículo, la cantidad de artículos y el año.
 select 
 	non empty
 	[Measures].[#num Articulos]
@@ -246,8 +226,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál fue el número de ventas en las que la empresa envío los artículos al cliente por cada año
--- registrado? Los datos a mostrar son el total de facturas y el año.
+-- 20. ¿Cuál fue el número de ventas en las que la empresa envío los artículos al cliente por cada año registrado? Los datos a mostrar son el total de facturas y el año.
 select 
 	non empty
 	[Measures].[#num Fact]
@@ -257,8 +236,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el total de ventas por colonia de los clientes? Los datos a mostrar son la colonia, el total
--- de ventas en pesos y la cantidad de artículos vendidos.
+-- 21. ¿Cuál es el total de ventas por colonia de los clientes? Los datos a mostrar son la colonia, el total de ventas en pesos y la cantidad de artículos vendidos.
 select 
 	non empty {
 	[Measures].[#total],
@@ -269,7 +247,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuáles son los días de la semana con menores ventas registradas en el año 2019?
+-- 22. ¿Cuáles son los días de la semana con menores ventas registradas en el año 2019?
 select 
 	non empty
 	[Measures].[#num Fact]
@@ -282,10 +260,9 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuáles son los cinco colores derivados más vendidos en esmaltes? Los datos a mostrar son el
--- color derivado del artículo, la cantidad de artículos, el total de ventas en pesos y el año.
+-- 23. ¿Cuáles son los cinco colores derivados más vendidos en esmaltes? Los datos a mostrar son el color derivado del artículo, la cantidad de artículos, el total de ventas en pesos y el año.
 
--- ¿Cuánto dinero se facturó por venta de complementos en 2018? 
+-- 24. ¿Cuánto dinero se facturó por venta de complementos en 2018? 
 select 
 	non empty
 	[Measures].[#total]
@@ -296,8 +273,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD]
 
--- ¿Cuántos colores base hay por artículo? Los datos a mostrar son el nombre del artículo, el color
--- base, el color derivado y la cantidad de artículos
+-- 25. ¿Cuántos colores base hay por artículo? Los datos a mostrar son el nombre del artículo, el color base, el color derivado y la cantidad de artículos
 select 
 	non empty
 	[Measures].[#num Articulos]
@@ -309,8 +285,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD]
 
--- ¿Cuál fue el monto por cada año en el que el cliente recogió la mercancía en la tienda? Los datos
--- a mostrar son el total de facturas, el total de ventas en pesos y el año.
+-- 26. ¿Cuál fue el monto por cada año en el que el cliente recogió la mercancía en la tienda? Los datos a mostrar son el total de facturas, el total de ventas en pesos y el año.
 select 
 	non empty {
 	[Measures].[#num Fact],
@@ -321,8 +296,7 @@ select
 	on rows
 from [PROYECTO1_VENTA_VOD]
 
--- ¿Cuál es el total de ventas por tipo de artículo por cada año registrado? Los datos a mostrar son
--- el nombre del artículo, la cantidad de artículos, el total de ventas en pesos y el año.
+-- 27. ¿Cuál es el total de ventas por tipo de artículo por cada año registrado? Los datos a mostrar son el nombre del artículo, la cantidad de artículos, el total de ventas en pesos y el año.
 select 
 	non empty
 	{
@@ -338,8 +312,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD]
 
--- ¿Cuántos litros de sellador se vendieron en los años 2011, 2013, 2015 y 2017? Los datos a
--- mostrar son el nombre del artículo, la cantidad, el total de ventas y el año.
+-- 28. ¿Cuántos litros de sellador se vendieron en los años 2011, 2013, 2015 y 2017? Los datos a mostrar son el nombre del artículo, la cantidad, el total de ventas y el año.
 select 
 	non empty
 	{
@@ -356,9 +329,7 @@ select
 from [PROYECTO1_VENTA_VOD]
 where [Dim Articulo 1].[Tipo].&[SELLADORES]
 
--- ¿Cuáles son los folios de facturas que vendió Javier? Los datos a mostrar son el nombre del
--- vendedor, el identificador de la factura, el folio de la factura, la fecha de la factura, el subtotal,
--- el descuento, el iva y el total de la factura.
+-- 29. ¿Cuáles son los folios de facturas que vendió Javier? Los datos a mostrar son el nombre del vendedor, el identificador de la factura, el folio de la factura, la fecha de la factura, el subtotal, el descuento, el iva y el total de la factura.
 select 
 	non empty {
 	[Measures].[#subtotal],
@@ -374,9 +345,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuánto dinero se facturó en los colores blanco, negro, rojo, amarillo y azul por cada periodo
--- registrado? Los datos a mostrar son color base, el color derivado (ejemplo rojo ladrillo), la
--- cantidad de artículos, el total de ventas en pesos y el año.
+-- 30. ¿Cuánto dinero se facturó en los colores blanco, negro, rojo, amarillo y azul por cada periodo registrado? Los datos a mostrar son color base, el color derivado (ejemplo rojo ladrillo), la cantidad de artículos, el total de ventas en pesos y el año.
 select 
 	non empty {
 	[Measures].[#num Articulos],
@@ -391,8 +360,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuáles son los folios de las facturas vendidas en los miércoles de diciembre del año 2011? Los
--- datos a mostrar son el identificador de factura, el folio de la factura, el mes y el año.
+-- 31. ¿Cuáles son los folios de las facturas vendidas en los miércoles de diciembre del año 2011? Los datos a mostrar son el identificador de factura, el folio de la factura, el mes y el año.
 select 
 	non empty
 	[Measures].[#num Fact]
@@ -405,8 +373,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el total de ventas por año registrado y por estado? Los datos a mostrar son el estado,
--- la colonia, el año y el total de ventas en pesos.
+-- 32. ¿Cuál es el total de ventas por año registrado y por estado? Los datos a mostrar son el estado, la colonia, el año y el total de ventas en pesos.
 select 
 	non empty
 	[Measures].[#total]
@@ -418,8 +385,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es el total de ventas por cada año por vendedor? Los datos a mostrar son el nombre del
--- vendedor, el total de ventas en pesos, la cantidad de artículos y el año
+-- 33. ¿Cuál es el total de ventas por cada año por vendedor? Los datos a mostrar son el nombre del vendedor, el total de ventas en pesos, la cantidad de artículos y el año
 select 
 	non empty {
 	[Measures].[#total],
@@ -431,8 +397,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál total de ventas por colonia de cliente? Los datos a mostrar son colonia, total de ventas en
--- pesos, cantidad de artículos vendidos y día de la semana (lunes, martes, etc.).
+-- 34. ¿Cuál total de ventas por colonia de cliente? Los datos a mostrar son colonia, total de ventas en pesos, cantidad de artículos vendidos y día de la semana (lunes, martes, etc.).
 select 
 	non empty {
 	[Measures].[#total],
@@ -444,8 +409,7 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- ¿Cuál es la condición de pago más usada por los clientes? Los datos a mostrar son las condiciones
--- de pago y el total de ventas.
+-- 35. ¿Cuál es la condición de pago más usada por los clientes? Los datos a mostrar son las condiciones de pago y el total de ventas.
 select 
 	non empty {
 	[Measures].[#total]
@@ -456,10 +420,6 @@ select
 	) on rows
 from [PROYECTO1_VENTA_VOD];
 
--- Se espera que el modelo tenga los datos calculados cantidad de artículos, precio de venta,
--- subtotal, descuento, subtotal, iva y total.
-
--- Si se analiza la factura 770 de ventas los datos calculados tendrán los valores mostrados en color
--- rojo y negritas en la siguiente imagen
+-- 37. Si se analiza la factura 770 de ventas los datos calculados tendrán los valores mostrados en color rojo y negritas en la siguiente imagen
 
 
