@@ -3,12 +3,12 @@ select
 	[Measures].[#num Fact]
 	on columns,
 	non empty(
-	[Dim Tiempo 1].[Anio].[Anio],
-	[Dim Tiempo 1].[Trimestre].[Trimestre],
-	[Dim Tiempo 1].[Nombre Mes].[Nombre Mes],
-	[Dim Tiempo 1].[Nombre Dia].[Nombre Dia]
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Trimestre].[Trimestre],
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
 	)on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 2. ¿Cuál es el total de ventas por vendedor?
 select 
@@ -17,16 +17,16 @@ select
 	non empty
 	[Dim Vendedor].[Nombre].[Nombre]
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 3. ¿Cuál es el total de ventas por año?
 select 
 	[Measures].[#num Fact]
 	on columns,
 	non empty
-	[Dim Tiempo 1].[Anio].[Anio]
+	[Dim Tiempo].[Anio].[Anio]
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 4. ¿Cuáles son los artículos que se vendieron en la factura 768? Los datos a mostrar son el identificador del artículo, el código, la descripción, el color base, la unidad de medida, la cantidad de cada artículo, el precio al que fue vendido, y el día de la semana de la factura.
 select 
@@ -35,14 +35,14 @@ select
 	[Measures].[#total] 
 	} on columns,
 	non empty (
-	[Dim Articulo 1].[Id Articulo].[Id Articulo],
-	[Dim Articulo 1].[Codigo].[Codigo],
-	[Dim Articulo 1].[Descripcion].[Descripcion],
-	[Dim Articulo 1].[Color Base].[Color Base],
-	[Dim Articulo 1].[UMD].[UMD],
-	[Dim Tiempo 1].[Nombre Dia].[Nombre Dia]
+	[Dim Articulo].[Id Articulo].[Id Articulo],
+	[Dim Articulo].[Codigo].[Codigo],
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Articulo].[Color Base].[Color Base],
+	[Dim Articulo].[UMD].[UMD],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
 	) on rows
-from [PROYECTO1_VENTA_VOD]
+from [PROYECTO1_VENTA_CUB]
 where [Dim Sub Factura].[Id Factura].&[768];
 
 -- 5. ¿Cuántos botes de un litro de vinil acrílicas se vendieron en 2013 por color base (negro, blanco, rojo, amarillo, azul, sin color)? 
@@ -51,12 +51,12 @@ select
 	[Measures].[#num Articulos]
 	on columns,
 	non empty
-	[Dim Articulo 1].[Color Base].[Color Base]
+	[Dim Articulo].[Color Base].[Color Base]
 	on rows
-from [PROYECTO1_VENTA_VOD]
-where ([Dim Articulo 1].[UMD].&[BOTE 1LT],
-	   [Dim Articulo 1].[Tipo].&[VINIL ACRILICAS],
-	   [Dim Tiempo 1].[Anio].&[2013]);
+from [PROYECTO1_VENTA_CUB]
+where ([Dim Articulo].[UMD].&[BOTE 1LT],
+	   [Dim Articulo].[Tipo].&[VINIL ACRILICAS],
+	   [Dim Tiempo].[Anio].&[2013]);
 
 -- 6. ¿Cuál es el total de ventas por artículo por cada periodo? Los datos a mostrar son el año, el mes número de facturas y el total en pesos.
 select 
@@ -65,11 +65,11 @@ select
 	 [Measures].[#total] }
 	on columns,
 	non empty (
-	[Dim Articulo 1].[Descripcion].[Descripcion],
-	[Dim Tiempo 1].[Anio].[Anio],
-	[Dim Tiempo 1].[Nombre Mes].[Nombre Mes]
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 7. ¿Cuántas cubetas de 19 litros de esmalte se vendieron en 2021?
 select 
@@ -77,12 +77,12 @@ select
 	[Measures].[#num Articulos]
 	on columns,
 	non empty (
-	[Dim Articulo 1].[Tipo].&[ESMALTES],
-	{[Dim Articulo 1].[UMD].&[CUB 19 L],
-	[Dim Articulo 1].[UMD].&[CUB 19LT]},
-	[Dim Tiempo 1].[Anio].&[2019]
+	[Dim Articulo].[Tipo].&[ESMALTES],
+	{[Dim Articulo].[UMD].&[CUB 19 L],
+	[Dim Articulo].[UMD].&[CUB 19LT]},
+	[Dim Tiempo].[Anio].&[2019]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 8. ¿Cuáles son los años de registro de ventas con los que la base de datos cuenta?
 select 
@@ -90,32 +90,32 @@ select
 	[Measures].[#num Fact]
 	on columns,
 	non empty
-	[Dim Tiempo 1].[Anio].[Anio]
+	[Dim Tiempo].[Anio].[Anio]
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 9. ¿Cuál es el impuesto por artículo por cada mes y año? Los datos a mostrar son el iva, el nombre del artículo, el mes y el año.
 select 
 	non empty(
 	[Measures].[#IVA],
-	[Dim Articulo 1].[Descripcion].[Descripcion])
+	[Dim Articulo].[Descripcion].[Descripcion])
 	on columns,
 	non empty (
-	[Dim Tiempo 1].[Anio].[Anio],
-	[Dim Tiempo 1].[Nombre Mes].[Nombre Mes]
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 10. ¿Cuánto dinero se facturó de pinturas color rojo en el 2014?
 select 
 	[Measures].[#total]
 	on columns,
 	non empty(
-	[Dim Articulo 1].[Descripcion].members,
-	[Dim Articulo 1].[Color Base].&[ROJO],
-	[Dim Tiempo 1].[Anio].[2014]
+	[Dim Articulo].[Descripcion].members,
+	[Dim Articulo].[Color Base].&[ROJO],
+	[Dim Tiempo].[Anio].[2014]
 	)on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 11. ¿Cuáles son los tres de clientes que más nos han comprado (pesos y cantidad)? Los datos a mostrar son el día de la semana, la razón social, la colonia, el código postal, el identificador del cliente, el total de ventas en pesos y el número de artículos.
 select 
@@ -126,13 +126,13 @@ select
 	non empty
 	topcount((
 	[Dim Cliente].[Razon Social].[Razon Social],
-	[Dim Tiempo 1].[Nombre Dia].[Nombre Dia],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia],
 	[Dim Cliente].[Colonia].[Colonia],
 	[Dim Cliente].[CP].[CP],
 	[Dim Cliente].[Id Cliente].[Id Cliente]
 	),3, [Measures].[#total])
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 select 
 	non empty{
@@ -142,13 +142,13 @@ select
 	non empty
 	topcount((
 	[Dim Cliente].[Razon Social].[Razon Social],
-	[Dim Tiempo 1].[Nombre Dia].[Nombre Dia],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia],
 	[Dim Cliente].[Colonia].[Colonia],
 	[Dim Cliente].[CP].[CP],
 	[Dim Cliente].[Id Cliente].[Id Cliente]
 	),3, [Measures].[#num Articulos])
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 12. ¿Cuál es la cantidad de artículos vendidos por cada grupo (categoría)? Los datos a mostrar son la descripción del grupo, el número de artículos vendidos y el total de ventas.
 select 
@@ -157,9 +157,9 @@ select
 	[Measures].[#num Articulos]
 	}on columns,
 	non empty
-	[Dim Articulo 1].[Grupo].[Grupo]
+	[Dim Articulo].[Grupo].[Grupo]
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 13. ¿Cuál es el mes del año con mejores ventas (en pesos)? Los datos a mostrar son el año, el total de ventas y la cantidad de artículos vendidos.
 
@@ -170,10 +170,10 @@ select
 	[Measures].[#total]
 	} on columns,
 	non empty topcount(
-	[Dim Articulo 1].[Tipo].[Tipo]
+	[Dim Articulo].[Tipo].[Tipo]
 	, 3, [Measures].[#num Articulos]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 15. ¿Cuál es el historial de ventas del cliente con identificador 3938? Los datos a mostrar son el identificador del cliente, la razón social, la colonia, el número de artículos, el número de facturas, el año, mes (enero, febrero, etc.) y día de la semana (lunes, martes, etc.).
 select 
@@ -184,11 +184,11 @@ select
 	non empty (	
 	[Dim Cliente].[Id Cliente].&[3938],
 	[Dim Cliente].[Razon Social].[Razon Social],
-	[Dim Tiempo 1].[Anio].[Anio],
-	[Dim Tiempo 1].[Nombre Mes].[Nombre Mes],
-	[Dim Tiempo 1].[Nombre Dia].[Nombre Dia]
+	[Dim Tiempo].[Anio].[Anio],
+	[Dim Tiempo].[Nombre Mes].[Nombre Mes],
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 16. ¿Cuál es el total de ventas por colonia del cliente? Los datos a mostrar son la colonia, el total de ventas en pesos y el número de facturas.
 select 
@@ -199,7 +199,7 @@ select
 	non empty
 	[Dim Cliente].[Colonia].[Colonia]
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 17. ¿Cuál es el artículo más vendido en el último año registrado en la base de datos? Los datos a mostrar son el año, el total, el número de veces que se ha vendido, el nombre del artículo, la categoría del artículo y el tipo del artículo.
 select 
@@ -208,12 +208,12 @@ select
 	[Measures].[#num Fact]
 	}on columns,
 	non empty
-	topcount(([Dim Tiempo 1].[Anio].[2019],
-	[Dim Articulo 1].[Descripcion].[Descripcion],
-	[Dim Articulo 1].[Tipo].[Tipo],[Dim Articulo 1].[Grupo].[Grupo]
+	topcount(([Dim Tiempo].[Anio].[2019],
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Articulo].[Tipo].[Tipo],[Dim Articulo].[Grupo].[Grupo]
 	),1,[Measures].[#num Articulos])
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 18. ¿Cuál es el artículo menos vendido en el último año registrado en la base de datos? Los datos a mostrar son el total, el número de veces que se ha vendido, el color, la unidad de medida, el nombre, la categoría y el tipo del artículo.
 select 
@@ -223,16 +223,16 @@ select
 	[Measures].[#num Articulos]
 	}on columns,
 	bottomcount((filter((
-	[Dim Tiempo 1].[Anio].[2019],
-	[Dim Articulo 1].[Color Base].[Color Base],
-	[Dim Articulo 1].[UMD].[UMD],
-	[Dim Articulo 1].[Descripcion].[Descripcion],
-	[Dim Articulo 1].[Tipo].[Tipo],
-	[Dim Articulo 1].[Grupo].[Grupo]
+	[Dim Tiempo].[Anio].[2019],
+	[Dim Articulo].[Color Base].[Color Base],
+	[Dim Articulo].[UMD].[UMD],
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Articulo].[Tipo].[Tipo],
+	[Dim Articulo].[Grupo].[Grupo]
 	),[Measures].[#num Articulos] > 0))
 	,1,[Measures].[#num Articulos])
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 19. ¿Cuáles colores se vendieron por cliente por cada año registrado? Los datos a mostrar son la razón social del cliente, el color base del artículo, la cantidad de artículos y el año.
 select 
@@ -241,10 +241,10 @@ select
 	on columns,
 	non empty (
 	[Dim Cliente].[Razon Social].[Razon Social],
-	[Dim Articulo 1].[Color Base].[Color Base],
-	[Dim Tiempo 1].[Anio].[Anio]
+	[Dim Articulo].[Color Base].[Color Base],
+	[Dim Tiempo].[Anio].[Anio]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 20. ¿Cuál fue el número de ventas en las que la empresa envío los artículos al cliente por cada año registrado? Los datos a mostrar son el total de facturas y el año.
 select 
@@ -252,9 +252,9 @@ select
 	[Measures].[#num Fact]
 	on columns,
 	non empty(
-	[Dim Tiempo 1].[Anio].[Anio]
+	[Dim Tiempo].[Anio].[Anio]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 21. ¿Cuál es el total de ventas por colonia de los clientes? Los datos a mostrar son la colonia, el total de ventas en pesos y la cantidad de artículos vendidos.
 select 
@@ -265,7 +265,7 @@ select
 	non empty (
 	[Dim Cliente].[Colonia].[Colonia]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 22. ¿Cuáles son los días de la semana con menores ventas registradas en el año 2019?
 select 
@@ -274,11 +274,11 @@ select
 	on columns,
 	non empty
 	bottomcount((
-	[Dim Tiempo 1].[Nombre Dia].[Nombre Dia],
-	[Dim Tiempo 1].[Anio].[2019]
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia],
+	[Dim Tiempo].[Anio].[2019]
 	),1,[Measures].[#num Fact])
 	on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 23. ¿Cuáles son los cinco colores derivados más vendidos en esmaltes? Los datos a mostrar son el color derivado del artículo, la cantidad de artículos, el total de ventas en pesos y el año.
 select 
@@ -288,12 +288,12 @@ select
 	}on columns, non empty
 	(
 	topcount(
-	([Dim Articulo 1].[Color Derivado].[Color Derivado]-[Dim Articulo 1].[Color Derivado].&[N/A]),
+	([Dim Articulo].[Color Derivado].[Color Derivado]-[Dim Articulo].[Color Derivado].&[N/A]),
 	5,[Measures].[#num Articulos]),
-	[Dim Tiempo 1].[Anio].[Anio]
+	[Dim Tiempo].[Anio].[Anio]
 	)on rows
-from [PROYECTO1_VENTA_VOD]
-where [Dim Articulo 1].[Tipo].&[ESMALTES];
+from [PROYECTO1_VENTA_CUB]
+where [Dim Articulo].[Tipo].&[ESMALTES];
 
 -- 24. ¿Cuánto dinero se facturó por venta de complementos en 2018? 
 select 
@@ -301,10 +301,10 @@ select
 	[Measures].[#total]
 	on columns,
 	non empty (
-	[Dim Tiempo 1].[Anio].&[2018],
-	[Dim Articulo 1].[Tipo].&[COMPLEMENTOS]
+	[Dim Tiempo].[Anio].&[2018],
+	[Dim Articulo].[Tipo].&[COMPLEMENTOS]
 	) on rows
-from [PROYECTO1_VENTA_VOD]
+from [PROYECTO1_VENTA_CUB];
 
 -- 25. ¿Cuántos colores base hay por artículo? Los datos a mostrar son el nombre del artículo, el color base, el color derivado y la cantidad de artículos
 select 
@@ -312,11 +312,11 @@ select
 	[Measures].[#num Articulos]
 	on columns,
 	non empty (
-	[Dim Articulo 1].[Descripcion].[Descripcion],
-	[Dim Articulo 1].[Color Base].[Color Base],
-	[Dim Articulo 1].[Color Derivado].[Color Derivado]
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Articulo].[Color Base].[Color Base],
+	[Dim Articulo].[Color Derivado].[Color Derivado]
 	) on rows
-from [PROYECTO1_VENTA_VOD]
+from [PROYECTO1_VENTA_CUB];
 
 -- 26. ¿Cuál fue el monto por cada año en el que el cliente recogió la mercancía en la tienda? Los datos a mostrar son el total de facturas, el total de ventas en pesos y el año.
 select 
@@ -325,42 +325,35 @@ select
 	[Measures].[#total] 
 	} on columns,
 	non empty
-	[Dim Tiempo 1].[Anio].[Anio]
+	[Dim Tiempo].[Anio].[Anio]
 	on rows
-from [PROYECTO1_VENTA_VOD]
+from [PROYECTO1_VENTA_CUB];
 
 -- 27. ¿Cuál es el total de ventas por tipo de artículo por cada año registrado? Los datos a mostrar son el nombre del artículo, la cantidad de artículos, el total de ventas en pesos y el año.
 select 
-	non empty
-	{
+	non empty {
 	[Measures].[#total],
 	[Measures].[#num Articulos]
-	}
-
-	on columns,
+	} on columns,
 	non empty (
-	[Dim Articulo 1].[Descripcion].[Descripcion],
-[Dim Tiempo 1].[Anio].[Anio]
-
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Tiempo].[Anio].[Anio]
 	) on rows
-from [PROYECTO1_VENTA_VOD]
+from [PROYECTO1_VENTA_CUB];
 
 -- 28. ¿Cuántos litros de sellador se vendieron en los años 2011, 2013, 2015 y 2017? Los datos a mostrar son el nombre del artículo, la cantidad, el total de ventas y el año.
 select 
-	non empty
-	{
+	non empty {
 	[Measures].[#total],
 	[Measures].[#num Articulos]
-	}
-
-	on columns,
+	} on columns,
 	non empty (
-	[Dim Articulo 1].[Descripcion].[Descripcion],
-	{[Dim Tiempo 1].[Anio].[2011],[Dim Tiempo 1].[Anio].[2013],
-	 [Dim Tiempo 1].[Anio].[2015],[Dim Tiempo 1].[Anio].[2017]}
+	[Dim Articulo].[Descripcion].[Descripcion],
+	{[Dim Tiempo].[Anio].[2011],[Dim Tiempo].[Anio].[2013],
+	 [Dim Tiempo].[Anio].[2015],[Dim Tiempo].[Anio].[2017]}
 	) on rows
-from [PROYECTO1_VENTA_VOD]
-where [Dim Articulo 1].[Tipo].&[SELLADORES]
+from [PROYECTO1_VENTA_CUB]
+where [Dim Articulo].[Tipo].&[SELLADORES];
 
 -- 29. ¿Cuáles son los folios de facturas que vendió Javier? Los datos a mostrar son el nombre del vendedor, el identificador de la factura, el folio de la factura, la fecha de la factura, el subtotal, el descuento, el iva y el total de la factura.
 select 
@@ -374,9 +367,9 @@ select
 	[Dim Vendedor].[Nombre].&[Javier],
 	[Dim Sub Factura].[Id Factura].[Id Factura],
 	[Dim Sub Factura].[Folio].[Folio],
-	[Dim Tiempo 1].[Id Tiempo].[Id Tiempo]
+	[Dim Tiempo].[Id Tiempo].[Id Tiempo]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 30. ¿Cuánto dinero se facturó en los colores blanco, negro, rojo, amarillo y azul por cada periodo registrado? Los datos a mostrar son color base, el color derivado (ejemplo rojo ladrillo), la cantidad de artículos, el total de ventas en pesos y el año.
 select 
@@ -385,13 +378,13 @@ select
 	[Measures].[#total]
 	} on columns,
 	non empty (
-	{[Dim Articulo 1].[Color Base].&[BLANCO],[Dim Articulo 1].[Color Base].&[NEGRO],
-	[Dim Articulo 1].[Color Base].&[ROJO], [Dim Articulo 1].[Color Base].&[AMARILLO],
-	[Dim Articulo 1].[Color Base].&[AZUL]},
-	[Dim Articulo 1].[Color Derivado].[Color Derivado],
-	[Dim Tiempo 1].[Anio].[Anio]
+	{[Dim Articulo].[Color Base].&[BLANCO],[Dim Articulo].[Color Base].&[NEGRO],
+	[Dim Articulo].[Color Base].&[ROJO], [Dim Articulo].[Color Base].&[AMARILLO],
+	[Dim Articulo].[Color Base].&[AZUL]},
+	[Dim Articulo].[Color Derivado].[Color Derivado],
+	[Dim Tiempo].[Anio].[Anio]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 31. ¿Cuáles son los folios de las facturas vendidas en los miércoles de diciembre del año 2011? Los datos a mostrar son el identificador de factura, el folio de la factura, el mes y el año.
 select 
@@ -401,10 +394,10 @@ select
 	non empty (
 	[Dim Sub Factura].[Id Factura].[Id Factura],
 	[Dim Sub Factura].[Folio].[Folio],
-	[Dim Tiempo 1].[Nombre Mes].&[December],
-	[Dim Tiempo 1].[Anio].&[2011]
+	[Dim Tiempo].[Nombre Mes].&[December],
+	[Dim Tiempo].[Anio].&[2011]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 32. ¿Cuál es el total de ventas por año registrado y por estado? Los datos a mostrar son el estado, la colonia, el año y el total de ventas en pesos.
 select 
@@ -412,11 +405,11 @@ select
 	[Measures].[#total]
 	on columns,
 	non empty (
-	[Dim Tiempo 1].[Anio].[Anio],
+	[Dim Tiempo].[Anio].[Anio],
 	[Dim Cliente].[Estado].[Estado],
 	[Dim Cliente].[Colonia].[Colonia]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 33. ¿Cuál es el total de ventas por cada año por vendedor? Los datos a mostrar son el nombre del vendedor, el total de ventas en pesos, la cantidad de artículos y el año
 select 
@@ -426,9 +419,9 @@ select
 	} on columns,
 	non empty (
 	[Dim Vendedor].[Nombre].[Nombre],
-	[Dim Tiempo 1].[Anio].[Anio]
+	[Dim Tiempo].[Anio].[Anio]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 34. ¿Cuál total de ventas por colonia de cliente? Los datos a mostrar son colonia, total de ventas en pesos, cantidad de artículos vendidos y día de la semana (lunes, martes, etc.).
 select 
@@ -438,9 +431,9 @@ select
 	} on columns,
 	non empty (
 	[Dim Cliente].[Colonia].[Colonia],
-	[Dim Tiempo 1].[Nombre Dia].[Nombre Dia]
+	[Dim Tiempo].[Nombre Dia].[Nombre Dia]
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 35. ¿Cuál es la condición de pago más usada por los clientes? Los datos a mostrar son las condiciones de pago y el total de ventas.
 select 
@@ -451,8 +444,63 @@ select
 	[Dim Sub Factura].[Condicion Pago].[Condicion Pago],
 	[Measures].[#total],BDESC
 	) on rows
-from [PROYECTO1_VENTA_VOD];
+from [PROYECTO1_VENTA_CUB];
 
 -- 37. Si se analiza la factura 770 de ventas los datos calculados tendrán los valores mostrados en color rojo y negritas en la siguiente imagen
+WITH 
+	MEMBER [Measures].[subtotal] as 
+			[Measures].[Recuento Fact Sales]*([Measures].[#subtotal]) 
+	MEMBER [Measures].[descuento] as 
+			[Measures].[Recuento Fact Sales]*([Measures].[#descuento]) 
+	MEMBER [Measures].[IVA] as 
+			[Measures].[Recuento Fact Sales]*([Measures].[#IVA]) 
+	MEMBER [Measures].[total] as 
+			[Measures].[Recuento Fact Sales]*([Measures].[#total]) 
+select 
+	{
+	[Measures].[subtotal],
+	[Measures].[descuento],
+	[Measures].[IVA],
+	[Measures].[total]
+	} on columns,
+	non empty (
+	[Dim Articulo].[Id Articulo]
+	) on rows
+from [PROYECTO1_VENTA_CUB]
+where [Dim Sub Factura].[Id Factura].&[770];
 
-
+WITH 
+	MEMBER [Measures].[% descuento] as 
+			([Measures].[#descuento]/
+			([Dim Articulo].[Id Articulo].[ALL],
+			[Measures].[#subtotal])),
+			format_string=" #.00 %" 
+	MEMBER [Measures].[% iva] as 
+			([Measures].[#IVA]/
+			([Dim Articulo].[Id Articulo].[ALL],
+			[Measures].[#subtotal])),
+			format_string=" #.00 %" 
+	MEMBER [Measures].[subtotal] as 
+			[Measures].[Recuento Fact Sales]*([Measures].[#subtotal]) 
+	MEMBER [Measures].[descuento] as 
+			[Measures].[Recuento Fact Sales]*([Measures].[#descuento]) 
+	MEMBER [Measures].[IVA] as 
+			[Measures].[Recuento Fact Sales]*([Measures].[#IVA]) 
+	MEMBER [Measures].[total] as 
+			[Measures].[Recuento Fact Sales]*([Measures].[#total]) 
+select 
+	{
+	[Measures].[#num Articulos],
+	[Measures].[#precio],
+	[Measures].[% descuento],
+	[Measures].[#descuento],
+	[Measures].[#total],
+	[Measures].[#IVA],
+	[Measures].[#subtotal],
+	[Measures].[% iva]
+	} on columns,
+	non empty (
+	[Dim Articulo].[Id Articulo].members
+	) on rows
+from [PROYECTO1_VENTA_CUB]
+where [Dim Sub Factura].[Id Factura].&[770];
