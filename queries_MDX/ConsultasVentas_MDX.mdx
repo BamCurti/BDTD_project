@@ -1,4 +1,14 @@
 -- 1. ¿Cuántas facturas se expidieron por periodo? Los datos a mostrar son el año, el trimestre, el mes, el día de la semana y el número de facturas de venta.
+select 
+	[Measures].[#num Fact]
+	on columns,
+	non empty(
+	[Dim Tiempo 1].[Anio].[Anio],
+	[Dim Tiempo 1].[Trimestre].[Trimestre],
+	[Dim Tiempo 1].[Nombre Mes].[Nombre Mes],
+	[Dim Tiempo 1].[Nombre Dia].[Nombre Dia]
+	)on rows
+from [PROYECTO1_VENTA_VOD];
 
 -- 2. ¿Cuál es el total de ventas por vendedor?
 select 
@@ -97,6 +107,15 @@ select
 from [PROYECTO1_VENTA_VOD];
 
 -- 10. ¿Cuánto dinero se facturó de pinturas color rojo en el 2014?
+select 
+	[Measures].[#total]
+	on columns,
+	non empty(
+	[Dim Articulo 1].[Descripcion].members,
+	[Dim Articulo 1].[Color Base].&[ROJO],
+	[Dim Tiempo 1].[Anio].[2014]
+	)on rows
+from [PROYECTO1_VENTA_VOD];
 
 -- 11. ¿Cuáles son los tres de clientes que más nos han comprado (pesos y cantidad)? Los datos a mostrar son el día de la semana, la razón social, la colonia, el código postal, el identificador del cliente, el total de ventas en pesos y el número de artículos.
 select 
@@ -198,20 +217,21 @@ from [PROYECTO1_VENTA_VOD];
 
 -- 18. ¿Cuál es el artículo menos vendido en el último año registrado en la base de datos? Los datos a mostrar son el total, el número de veces que se ha vendido, el color, la unidad de medida, el nombre, la categoría y el tipo del artículo.
 select 
-	non empty{
+	{
 	[Measures].[#total],
 	[Measures].[#num Fact],
 	[Measures].[#num Articulos]
 	}on columns,
-	non empty
-	bottomcount(([Dim Tiempo 1].[Anio].[2009],
+	bottomcount((filter((
+	[Dim Tiempo 1].[Anio].[2019],
 	[Dim Articulo 1].[Color Base].[Color Base],
 	[Dim Articulo 1].[UMD].[UMD],
 	[Dim Articulo 1].[Descripcion].[Descripcion],
 	[Dim Articulo 1].[Tipo].[Tipo],
 	[Dim Articulo 1].[Grupo].[Grupo]
-	),1, [Measures].[#num Articulos]
-	) on rows
+	),[Measures].[#num Articulos] > 0))
+	,1,[Measures].[#num Articulos])
+	on rows
 from [PROYECTO1_VENTA_VOD];
 
 -- 19. ¿Cuáles colores se vendieron por cliente por cada año registrado? Los datos a mostrar son la razón social del cliente, el color base del artículo, la cantidad de artículos y el año.
@@ -261,6 +281,19 @@ select
 from [PROYECTO1_VENTA_VOD];
 
 -- 23. ¿Cuáles son los cinco colores derivados más vendidos en esmaltes? Los datos a mostrar son el color derivado del artículo, la cantidad de artículos, el total de ventas en pesos y el año.
+select 
+	{
+	[Measures].[#total],
+	[Measures].[#num Articulos]
+	}on columns, non empty
+	(
+	topcount(
+	([Dim Articulo 1].[Color Derivado].[Color Derivado]-[Dim Articulo 1].[Color Derivado].&[N/A]),
+	5,[Measures].[#num Articulos]),
+	[Dim Tiempo 1].[Anio].[Anio]
+	)on rows
+from [PROYECTO1_VENTA_VOD]
+where [Dim Articulo 1].[Tipo].&[ESMALTES];
 
 -- 24. ¿Cuánto dinero se facturó por venta de complementos en 2018? 
 select 

@@ -13,7 +13,7 @@ BEGIN
 	DELETE PROYECTO1_BDTD.DBO.DimTiempo;
 	DELETE PROYECTO1_BDTD.DBO.DimVendedor;
 
---POBLAR LA DIMENSIÓN ARTICULO !!!!FALTA COLOR!!!!!!
+--POBLAR LA DIMENSIÓN ARTICULO
 INSERT INTO PROYECTO1_BDTD.dbo.DimArticulo (Id_Articulo, Descripcion, Codigo, ColorBase, ColorDerivado, UMD, Tipo, Grupo)
 	SELECT a.id_articulo, a.descripcion, a.codigo,
 	--color base
@@ -95,8 +95,8 @@ INSERT INTO PROYECTO1_BDTD.dbo.DimArticulo (Id_Articulo, Descripcion, Codigo, Co
 	and a.id_umd = u.id_umd;
 
 --POBLAR LA DIMENSIÓN CLIENTE
-INSERT INTO PROYECTO1_BDTD.DBO.DimCliente (Id_cliente, RazonSocial, Colonia, CP, Ciudad, Estado, Pais)
-	SELECT cl.Id_Cliente, cl.RazonSocial, cl.Colonia, cl.CodigoPostal, ci.nombre, ci.estado, ci.pais
+INSERT INTO PROYECTO1_BDTD.DBO.DimCliente (Id_cliente, RazonSocial, Colonia, CP, Ciudad, Estado, Pais, CodigoPostal)
+	SELECT cl.Id_Cliente, cl.RazonSocial, cl.Colonia, cl.CodigoPostal, ci.nombre, ci.estado, ci.pais, cl.CodigoPostal
 	FROM PinturaO2021.dbo.Cliente cl, PinturaO2021.dbo.Ciudad ci
 	where cl.id_ciudad = ci.id_ciudad
 
@@ -149,9 +149,9 @@ with a_x_f as (
 	from PinturaO2021.dbo.Factura_d
 	group by Id_Factura
 )
-insert into PROYECTO1_BDTD.dbo.FactSales(#num_fact, #num_articulos, #total, #subtotal, #descuento, #IVA, Id_tiempo, Id_articulo, Id_cliente, Id_factura, Id_vendedor)
+insert into PROYECTO1_BDTD.dbo.FactSales(#num_fact, #num_articulos, #total, #subtotal, #descuento, #IVA, #precio, Id_tiempo, Id_articulo, Id_cliente, Id_factura, Id_vendedor)
 	SELECT f_d.cantidad / axf.cantidad, --num_fact
-	f_d.cantidad, f_d.total, f_d.subtotal, f_d.Descuento, f_d.iva,
+	f_d.cantidad, f_d.total, f_d.subtotal, f_d.Descuento, f_d.iva, f_d.precio,
 		cast( --idtiempo
 			SUBSTRING(convert(varchar, f.fecha, 126),1,4) +
 			SUBSTRING(convert(varchar, f.fecha, 126),6,2) +
@@ -180,8 +180,8 @@ insert into PROYECTO1_BDTD.dbo.DimComprador(id_comprador,nombre)
 	from PinturaO2021.dbo.Comprador;
 
 --POBLAR LA SUB DIMENSIÓN PROVEEDOR
-insert into PROYECTO1_BDTD.DBO.DimProveedor(Id_proveedor, RazonSocial, Colonia, Ciudad, Estado, Pais)
-	select Id_Proveedor, RazonSocial, Colonia, c.nombre, c.estado, c.pais
+insert into PROYECTO1_BDTD.DBO.DimProveedor(Id_proveedor, RazonSocial, Colonia, Ciudad, Estado, Pais, CodigoPostal)
+	select Id_Proveedor, RazonSocial, Colonia, c.nombre, c.estado, c.pais, CodigoPostal
 	from PinturaO2021.dbo.Proveedor p
 	inner join PinturaO2021.dbo.Ciudad c on (c.id_ciudad=p.id_Ciudad);
 
@@ -193,11 +193,11 @@ insert into PROYECTO1_BDTD.DBO.DimProveedor(Id_proveedor, RazonSocial, Colonia, 
 	group by id_proveedorfactura
  )
 insert into PROYECTO1_BDTD.dbo.FactCompra(#cantidad_compra, #total, #subtotal,
-	#descuento,	#IVA, #cantidad_articulos, 
+	#descuento,	#IVA, #cantidad_articulos, #precio,
 	Id_tiempo, Id_articulo, Id_proveedor, Id_comprador, Id_compra)
 	SELECT f_d.Cantidad / cant_x_fact.cantidad, --cantidad compra
 	f_d.total, f_d.subtotal, f_d.Descuento, f_d.iva, 
-		f_d.Cantidad,	
+		f_d.Cantidad, f_d.precio,	
 		cast( --idtiempo
 			SUBSTRING(convert(varchar, f.fecha, 126),1,4) +
 			SUBSTRING(convert(varchar, f.fecha, 126),6,2) +

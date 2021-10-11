@@ -33,7 +33,8 @@ CREATE TABLE PROYECTO1_BDTD.dbo.DimCliente
 	CP varchar(5),
 	Ciudad varchar(100),
 	Estado varchar(50),
-	Pais varchar(50)
+	Pais varchar(50),
+	CodigoPostal varchar(50)
 )
 
 CREATE TABLE PROYECTO1_BDTD.dbo.DimTiempo
@@ -56,6 +57,7 @@ CREATE TABLE PROYECTO1_BDTD.dbo.FactSales
 	#subtotal decimal(18,2),
 	#descuento decimal(18,2),
 	#IVA decimal(18,2),
+	#precio decimal(18,4),
 	Id_tiempo bigint foreign key references DimTiempo(Id_tiempo),
 	Id_articulo int foreign key references DimArticulo(Id_articulo),
 	Id_vendedor int foreign key references DimVendedor(id_vendedor),
@@ -83,7 +85,8 @@ CREATE TABLE PROYECTO1_BDTD.DBO.DimProveedor
 	Colonia varchar(50),
 	Ciudad varchar(100),
 	Estado varchar(50),
-	Pais varchar(50)
+	Pais varchar(50),
+	CodigoPostal varchar(50)
 )
 
 CREATE TABLE PROYECTO1_BDTD.dbo.FactCompra
@@ -94,6 +97,7 @@ CREATE TABLE PROYECTO1_BDTD.dbo.FactCompra
 	#subtotal decimal(18,2),
 	#descuento decimal(18,2),
 	#IVA decimal(18,2),
+	#precio decimal(18,4),
 	Id_tiempo bigint foreign key references DimTiempo(Id_tiempo),
 	Id_articulo int foreign key references DimArticulo(Id_articulo),
 	Id_proveedor int foreign key references DimProveedor(id_proveedor),

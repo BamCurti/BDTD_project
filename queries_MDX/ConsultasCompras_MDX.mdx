@@ -182,19 +182,22 @@ from [PROYECTO1_COMPRA_CUB];
 
 -- 16. ¿Cuál es el artículo menos comprado en el último año registrado en la base de datos? Los datos a mostrar son el total en pesos, el número de veces que se ha comprado, el color derivado, la unidad de medida, el nombre del artículo, la categoría del artículo y el tipo del artículo.
 select 
-non empty {
-[Measures].[#total],
-[Measures].[#cantidad Articulos]
-}on columns,
-non empty bottomcount(( 
-[Dim Articulo].[Color Derivado].[Color Derivado],
-[Dim Articulo].[UMD].[UMD],
-[Dim Articulo].[Descripcion].[Descripcion],
-[Dim Articulo].[Grupo].[Grupo],
-[Dim Articulo].[Tipo].[Tipo]
-),1,[Measures].[#cantidad Articulos])on rows
-from [PROYECTO1_COMPRA_CUB]
-where [Dim Tiempo].[Anio].[2019];
+	{
+	[Measures].[#total],
+	[Measures].[#cantidad Compra],
+	[Measures].[#cantidad Articulos]
+	}on columns,
+	bottomcount((filter((
+	[Dim Tiempo].[Anio].[2019],
+	[Dim Articulo].[Color Derivado].[Color Derivado],
+	[Dim Articulo].[UMD].[UMD],
+	[Dim Articulo].[Descripcion].[Descripcion],
+	[Dim Articulo].[Tipo].[Tipo],
+	[Dim Articulo].[Grupo].[Grupo]
+	),[Measures].[#cantidad Articulos] > 0))
+	,1,[Measures].[#cantidad Articulos])
+	on rows
+from [PROYECTO1_COMPRA_CUB];
 
 -- 17. ¿Cuál es el total de compras, en pesos, por año por comprador? Los datos a mostrar son el total de compras en pesos, la cantidad de facturas, el total de artículos, la cantidad de cada artículo comprado y el año.
 select 
@@ -371,3 +374,66 @@ from [PROYECTO1_COMPRA_CUB];
 -- 31. ¿Cuál es el comprador que compra más por día de la semana? Los datos a mostrar son el nombre del comprador, el total de compras, la cantidad de facturas, la cantidad de artículos y el día de la semana.
 
 -- 33. Si se analiza la factura 724 de compras los datos calculados tendrán los valores mostrados color
+WITH 
+	MEMBER [Measures].[subtotal] as 
+			[Measures].[Recuento Fact Compra]*([Measures].[#subtotal]) 
+	MEMBER [Measures].[descuento] as 
+			[Measures].[Recuento Fact Compra]*([Measures].[#descuento]) 
+	MEMBER [Measures].[IVA] as 
+			[Measures].[Recuento Fact Compra]*([Measures].[#IVA]) 
+	MEMBER [Measures].[total] as 
+			[Measures].[Recuento Fact Compra]*([Measures].[#total]) 
+select 
+	{
+	[Measures].[subtotal],
+	[Measures].[descuento],
+	[Measures].[IVA],
+	[Measures].[total]
+	}on columns,
+	NON EMPTY
+	(
+	[Dim Articulo].[Id Articulo]
+	)
+	on rows
+from [PROYECTO1_COMPRA_CUB]
+WHERE [Dim Sub Compra].[Id Compra].&[724];
+
+WITH 
+	MEMBER [Measures].[% descuento] as 
+			([Measures].[#descuento]/
+			([Dim Articulo].[Id Articulo].[ALL],
+			[Measures].[#subtotal])),
+			format_string=" #.00 %" 
+	MEMBER [Measures].[% iva] as 
+			([Measures].[#iva]/
+			([Dim Articulo].[Id Articulo].[ALL],
+			[Measures].[#subtotal])),
+			format_string=" #.00 %" 
+	MEMBER [Measures].[subtotal] as 
+			[Measures].[Recuento Fact Compra]*([Measures].[#subtotal]) 
+	MEMBER [Measures].[descuento] as 
+			[Measures].[Recuento Fact Compra]*([Measures].[#descuento]) 
+	MEMBER [Measures].[IVA] as 
+			[Measures].[Recuento Fact Compra]*([Measures].[#IVA]) 
+	MEMBER [Measures].[total] as 
+			[Measures].[Recuento Fact Compra]*([Measures].[#total]) 
+	MEMBER [Measures].[precio] as
+		(([Measures].[#subtotal]-[Measures].[#descuento]+[Measures].[#IVA])/[Measures].[#cantidad Articulos])
+select 
+	{
+	[Measures].[#cantidad Articulos],
+	[Measures].[precio],
+	[Measures].[% descuento],
+	[Measures].[#descuento],
+	[Measures].[#total],
+	[Measures].[#IVA],
+	[Measures].[#subtotal],
+	[Measures].[% iva]
+	}on columns,
+	NON EMPTY
+	(
+	[Dim Articulo].[Id Articulo].members
+	)
+	on rows
+from [PROYECTO1_COMPRA_CUB]
+WHERE [Dim Sub Compra].[Id Compra].&[724];
