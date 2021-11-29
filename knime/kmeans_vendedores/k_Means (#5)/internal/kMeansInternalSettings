@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="kMeans">
+    <entry key="dimensions" type="xint" value="3"/>
+    <entry key="ignoredColumns" type="xint" value="1"/>
+    <config key="clusterCoverage">
+        <entry key="array-size" type="xint" value="3"/>
+        <entry key="0" type="xint" value="1"/>
+        <entry key="1" type="xint" value="3"/>
+        <entry key="2" type="xint" value="1"/>
+    </config>
+    <config key="kMeansCluster0">
+        <entry key="array-size" type="xint" value="2"/>
+        <entry key="0" type="xdouble" value="20.0"/>
+        <entry key="1" type="xdouble" value="4339.999999959969"/>
+    </config>
+    <config key="kMeansCluster1">
+        <entry key="array-size" type="xint" value="2"/>
+        <entry key="0" type="xdouble" value="22.0"/>
+        <entry key="1" type="xdouble" value="79.66666666766669"/>
+    </config>
+    <config key="kMeansCluster2">
+        <entry key="array-size" type="xint" value="2"/>
+        <entry key="0" type="xdouble" value="24.0"/>
+        <entry key="1" type="xdouble" value="1778.9999999479937"/>
+    </config>
+    <config key="FeatureNames">
+        <entry key="array-size" type="xint" value="3"/>
+        <entry key="0" type="xstring" value="id_vendedor"/>
+        <entry key="1" type="xstring" value="Sum(num_fact)"/>
+        <entry key="2" type="xstring" isnull="true" value=""/>
+    </config>
+</config>
