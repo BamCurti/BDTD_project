@@ -1,4 +1,4 @@
-//para revisar los más comprados por año
+//para revisar los más vendidos por año
     match (ar:Articulo)-[:ES_VENTA]->(v:Venta_d)<-[:EN_VENTA]-(:Tiempo{anio:2013})
     return ar.id_articulo, count(ar.descripcion)
     order by count(ar.descripcion) desc
