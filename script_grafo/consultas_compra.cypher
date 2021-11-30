@@ -111,4 +111,21 @@ size((u)-[:ES_COMPRA]-())  AS Degree
 order by Degree desc
 limit 3;
 
-//12.  Dado una factura calcular la similaridad con otras. Probar con la factura 768. 
+//12.  Dado una factura de compra calcular la similaridad con otras. Probar con la compra 123. 
+///// CONFIGURAMOS /////
+:param limit => (5);
+:param config => ({
+  similarityCutoff: 0.1,
+  degreeCutoff: 1,
+  nodeProjection: '*',
+  relationshipProjection: {
+    relType: {
+      type: '*',
+      orientation: 'UNDIRECTED',
+      properties: {}
+    }
+  }
+});
+:param communityNodeLimit => ( 10);
+
+///// CALCULAMOS /////
