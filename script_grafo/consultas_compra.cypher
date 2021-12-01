@@ -127,5 +127,9 @@ limit 3;
   }
 });
 :param communityNodeLimit => ( 10);
-
 ///// CALCULAMOS /////
+CALL gds.nodeSimilarity.stream($config) YIELD node1, node2, similarity
+WHERE gds.util.asNode(node1).id_compra = 123
+RETURN gds.util.asNode(node1) AS from, gds.util.asNode(node2) AS to, similarity 
+ORDER BY similarity DESC
+LIMIT toInteger($limit)
